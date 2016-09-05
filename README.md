@@ -53,5 +53,5 @@ chmod ...
 # run some daemons as root
 nohup /usr/local/bin/confd -watch ... >> /data/logs/out.log
 # run some daemons as user app
-oneway -n app app /app.sh
+exec oneway -n app app /app.sh
 ```
