@@ -2,8 +2,13 @@
 
 ## Introduction
 
+If you want to drop privilidges (as in Docker entry-points) but you don't want
+your process to be child process of `su` or `sudo` process.
+
 Unlike `su` or `sudo` this tool would `exec` to replace the 
 current process (so it would receive signals ..etc.)
+
+This tool can also set special process flags so disallow any future privileges
 
 This process simply calls
 
@@ -15,7 +20,7 @@ This process simply calls
 ## Usage
 
 ```
-oneway [-n|-N] USER GROUP COMMAND ARGUMENT...
+oneway [-n|-N] USER GROUP COMMAND ARGUMENTS...
 ```
 
 * `-n` no new privileges by setting `PR_SET_NO_NEW_PRIVS` with `prctl`
@@ -36,9 +41,11 @@ ping: socket: Operation not permitted
 ping: socket: Operation not permitted
 ```
 
+
 ## Docker usage
 
-In your `Dockerfile` you might use Yelp's `dumb-init`
+In your `Dockerfile` you might use [Yelp's dumb-init](https://github.com/Yelp/dumb-init)
+
 
 ```
 ENTRYPOINT [ "/usr/local/bin/dumb-init", "/start.sh" ]
