@@ -2,7 +2,7 @@
 
 ## Introduction
 
-If you want to drop privilidges (as in Docker entry-points) but you don't want
+If you want to drop privileges (as in Docker entry-points) but you don't want
 your process to be child process of `su` or `sudo` process.
 
 Unlike `su` or `sudo` this tool would `exec` to replace the 
