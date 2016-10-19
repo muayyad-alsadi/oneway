@@ -12,11 +12,13 @@
 #endif
 
 // we might use getpwnam_r 
-uid_t name_to_uid(char const *name)
+uid_t name_to_uid(char const *name, char** home, char **shell)
 {
   if (!name) return -1;
   struct passwd *ptr=getpwnam(name);
   if (0 == ptr) return -1;
+  *home=strdup(ptr->pw_dir);
+  *shell=(ptr->pw_shell);
   return ptr->pw_uid;
 }
 
@@ -40,11 +42,14 @@ void usage() {
 
 int main(int argc, char * argv[]) {
     int is_one_way=0, uid, gid;
+    char *home=NULL, *shell=NULL;
     if (argc<5) usage();
     if (strcasecmp(argv[1], "-n")) usage();
     is_one_way = (argv[1][1]=='n');
-    uid = name_to_uid(argv[2]);
+    uid = name_to_uid(argv[2], &home, &shell);
     gid = name_to_gid(argv[3]);
+    setenv("HOME", home, 1);
+    setenv("SHELL", shell, 1);
     printf("setting uid=%d (%s) gid=%d (%s)\n", uid, argv[2], gid, argv[3]);
     if (getuid() == 0) {
         /* process is running as root, drop privileges */
