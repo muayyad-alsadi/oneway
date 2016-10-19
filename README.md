@@ -29,14 +29,14 @@ oneway [-n|-N] USER GROUP COMMAND ARGUMENTS...
 we have a `test.sh` which display `id` then it pings google (which is a suid binary)
 
 ```
-./oneway -n alsadi alsadi ./test.sh
+./oneway -n alsadi ./test.sh
 ```
 
 typically this would give
 
 ```
-setting uid=1000 (alsadi) gid=1000 (alsadi)
-uid=1000(alsadi) gid=1000(alsadi) groups=1000(alsadi) context=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
+setting uid=1000 (alsadi) gid=1000
+uid=1000(alsadi) gid=1000(alsadi) groups=1000(alsadi),10(wheel),135(mock),973(wireshark) context=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
 ping: socket: Operation not permitted
 ping: socket: Operation not permitted
 ```
@@ -60,5 +60,5 @@ chmod ...
 # run some daemons as root
 nohup /usr/local/bin/confd -watch ... >> /data/logs/out.log
 # run some daemons as user app
-exec oneway -n app app /app.sh
+exec oneway -n app /app.sh
 ```
