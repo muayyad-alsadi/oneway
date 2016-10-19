@@ -20,7 +20,7 @@ This process simply calls
 ## Usage
 
 ```
-oneway [-n|-N] USER GROUP COMMAND ARGUMENTS...
+oneway [-n|-N] USER COMMAND ARGUMENTS...
 ```
 
 * `-n` no new privileges by setting `PR_SET_NO_NEW_PRIVS` with `prctl`
