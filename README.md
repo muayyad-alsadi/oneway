@@ -62,3 +62,13 @@ nohup /usr/local/bin/confd -watch ... >> /data/logs/out.log
 # run some daemons as user app
 exec oneway -n app /app.sh
 ```
+
+## FAQ
+
+* Q: Why is the benitift of this?
+  * drop priviligies in "oneway" manner.
+* Q: What is the advantage over `su` / `sudo`
+  * they do not drop priviligies they change user.
+  * `oneway` make use of kernel `PR_SET_NO_NEW_PRIVS`
+  * with `su` / `sudo` one might be able to escelate (ex. using `setuid` binaries)
+
