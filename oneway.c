@@ -46,7 +46,7 @@ void usage() {
 }
 
 int main(int argc, char * argv[]) {
-    int is_one_way=0, uid, gid;
+    int is_one_way=0, running_uid, uid, gid;
     char *user_name=NULL;
     char *home=NULL, *shell=NULL;
     if (argc<4) usage();
@@ -60,7 +60,8 @@ int main(int argc, char * argv[]) {
     setenv("HOME", home, 1);
     setenv("SHELL", shell, 1);
     printf("setting uid=%d (%s) gid=%d\n", uid, argv[2], gid);
-    if (getuid() == 0) {
+    running_uid = getuid();
+    if (running_uid == 0) {
         /* process is running as root, drop privileges */
         if (setgid(gid) != 0) {
             perror("Unable to drop group privileges");
@@ -78,6 +79,11 @@ int main(int argc, char * argv[]) {
             return -1;
         }
 
+    } else {
+        printf("already not privileged\n");
+        if (running_uid!=uid) {
+            fprintf(stderr, "WARNING: running as %d, did not change to %s[%d]\n", running_uid, user_name, uid);
+        }
     }
     if (is_one_way && prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0)) {
         perror("failed calling prctl(NO_NEW_PRIVS)");
