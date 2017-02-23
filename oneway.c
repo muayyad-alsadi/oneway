@@ -16,13 +16,17 @@ uid_t name_to_uid(char const *name, gid_t *gid, char** home, char **shell)
 {
   if (!name) return -1;
   struct passwd *ptr=getpwnam(name);
-  if (0 == ptr) return -1;
+  if (0 == ptr) {
+      fprintf(stderr, "could not find user [%s]\n", name);
+      return -1;
+  }
   *gid=ptr->pw_gid;
   *home=strdup(ptr->pw_dir);
   *shell=(ptr->pw_shell);
   return ptr->pw_uid;
 }
 
+/*
 uid_t name_to_gid(char const *name)
 {
   if (!name) return -1;
@@ -30,7 +34,7 @@ uid_t name_to_gid(char const *name)
   if (0 == ptr) return -1;
   return ptr->gr_gid;
 }
-
+*/
 
 void usage() {
     printf(
@@ -50,6 +54,9 @@ int main(int argc, char * argv[]) {
     is_one_way = (argv[1][1]=='n');
     user_name = argv[2];
     uid = name_to_uid(user_name, &gid, &home, &shell);
+    if (uid<0) {
+        return -1;
+    }
     setenv("HOME", home, 1);
     setenv("SHELL", shell, 1);
     printf("setting uid=%d (%s) gid=%d\n", uid, argv[2], gid);
