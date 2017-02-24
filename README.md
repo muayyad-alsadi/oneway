@@ -41,6 +41,17 @@ ping: socket: Operation not permitted
 ping: socket: Operation not permitted
 ```
 
+## Installation
+
+To build it you only need `gcc`
+
+```
+yum install gcc glibc-static
+make
+```
+
+You can get binaries directly from our github [releases](https://github.com/muayyad-alsadi/oneway/releases)
+
 
 ## Docker usage
 
